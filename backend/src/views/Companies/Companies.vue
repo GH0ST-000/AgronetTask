@@ -8,7 +8,7 @@
       Add new companies
     </button>
   </div>
-  <CompaniesModal v-model="showModal" :companies="companiesModel"/>
+  <CompaniesModal v-model="showModal" :companies="companiesModel" @close="onModalClose"/>
   <CompaniesTable @clickEdit="editCompanies"/>
 </template>
 
@@ -17,15 +17,16 @@ import CompaniesTable from "./CompaniesTable.vue";
 import CompaniesModal from "./CompaniesModal.vue";
 import {ref} from "vue";
 import store from "../../store";
-
-const showModal = ref(false);
-const companiesModel = ref({
+const DEFAULT_EMPTY_OBJECT={
   id:'',
   name:'',
   email:'',
   image:'',
   website:'',
-})
+}
+
+const showModal = ref(false);
+const companiesModel = ref({...DEFAULT_EMPTY_OBJECT})
 function showCompaniesModal(){
   showModal.value = true;
 }
@@ -36,6 +37,10 @@ store.dispatch('getCompany',companies.id)
     companiesModel.value = data;
     showCompaniesModal();
   })
+}
+
+function onModalClose(){
+  companiesModel.value = {...DEFAULT_EMPTY_OBJECT};
 }
 
 </script>

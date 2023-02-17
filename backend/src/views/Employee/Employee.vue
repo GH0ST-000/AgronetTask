@@ -9,7 +9,7 @@
     </button>
   </div>
 
-  <EmployeeModal v-model="showModal" :emp="employeeModel"/>
+  <EmployeeModal v-model="showModal" :emp="employeeModel" @close="onModalClose"/>
   <EmployeeTable @clickEdit="editEmployee"/>
 </template>
 
@@ -19,16 +19,16 @@ import {ref} from "vue";
 import store from "../../store";
 import EmployeeModal from "./EmployeeModal.vue";
 import EmployeeTable from "./EmployeeTable.vue";
-
-const showModal = ref(false);
-const employeeModel = ref({
+const DEFAULT_EMPTY_OBJECT={
   id:'',
   first_name:'',
   last_name:'',
   companies:'',
   email:'',
   phone:'',
-})
+}
+const showModal = ref(false);
+const employeeModel = ref({...DEFAULT_EMPTY_OBJECT})
 function showEmployeeModal(){
   showModal.value = true;
 }
@@ -39,6 +39,10 @@ store.dispatch('getEmploy',employee.id)
     employeeModel.value = data.data;
     showEmployeeModal();
   })
+}
+
+function onModalClose(){
+  employeeModel.value = {...DEFAULT_EMPTY_OBJECT};
 }
 
 </script>
