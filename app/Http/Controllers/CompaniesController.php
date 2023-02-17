@@ -49,17 +49,13 @@ class CompaniesController extends Controller
 
     public function update(CompaniesValidation $request, $id)
     {
-
         $data = $request->validated();
-
         $image = $data['logo'] ?? null;
-
         if ($image) {
             $relativePath = $this->saveImage($image);
             $data['logo'] = URL::to(Storage::url($relativePath));
         }
         Companies::where('id',$id)->update($data);
-
     }
 
 

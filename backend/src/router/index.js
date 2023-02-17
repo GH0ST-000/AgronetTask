@@ -6,7 +6,7 @@ import Companies from "../views/Companies/Companies.vue";
 import RequestPassword from "../views/RequestPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import NotFound from "../views/NotFound.vue";
-import Employee from "../views/Employee.vue";
+import Employee from "../views/Employee/Employee.vue";
 import store from "../store";
 
 const routes = [

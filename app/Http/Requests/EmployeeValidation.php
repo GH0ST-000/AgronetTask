@@ -18,7 +18,7 @@ class EmployeeValidation extends FormRequest
         return [
             'first_name'=>'required',
             'last_name'=>'required',
-            'company'=>'required',
+            'companies_id'=>'',
             'email'=>'nullable|email',
             'phone'=>'nullable',
         ];

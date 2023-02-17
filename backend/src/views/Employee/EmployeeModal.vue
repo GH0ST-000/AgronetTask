@@ -33,8 +33,8 @@
               <Spinner v-if="loading" class="absolute left-0 top-0 bg-white right-0 bg-white bottom-0 flex items-center justify-center" />
               <header class="py-3 px-4 flex justify-between items-center">
 
-                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-9--">
-                  {{companies.id ? `Update Companies:"${props.companies.name}"` : 'Create New Companies'}}
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium bg-green-200 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md">
+                  {{emp.id ? `Update Employee: ${props.emp.first_name}` : 'Create New Employee'}}
                 </DialogTitle>
                 <button
                   @click="closeModal()"
@@ -80,12 +80,14 @@
               </div>
               <form @submit.prevent="onSubmit">
                 <div class="bg-white px-4 pt-5 pb-4">
-
-                  <CustomInput class="mb-2" v-model="companies.name" label="Company Name"/>
-                  <CustomInput type="text" class="mb-2" v-model="companies.email" label="Email"/>
-                  <CustomInput type="file" class="mb-2" label="Company Image" @change="file => companies.image = file"/>
-                  <CustomInput type="text" class="mb-2" v-model="companies.website" label="Website"/>
-
+                  <CustomInput class="mb-2" v-model="emp.first_name" label="Employee Name"/>
+                  <CustomInput class="mb-2" v-model="emp.last_name" label="Employee lastname"/>
+                  <select class="mb-2 mt-1 w-full flex rounded-md shadow-sm inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                    <option>Select Companies</option>
+                    <option>1</option>
+                  </select>
+                  <CustomInput class="mb-2" v-model="emp.email" label="Employee email"/>
+                  <CustomInput class="mb-2" v-model="emp.phone" label="Employee phone"/>
                 </div>
                 <footer class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button type="submit"
@@ -100,7 +102,6 @@
                   </button>
                 </footer>
               </form>
-
             </DialogPanel>
           </TransitionChild>
         </div>
@@ -123,23 +124,27 @@ import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store";
 const  loading = ref(false);
 let errorMsg = ref("");
-const companies = ref({
 
-  id:props.companies.id,
-  name:props.companies.name,
-  email:props.companies.email,
-  image:props.companies.image,
-  website:props.companies.website,
 
+const emp = ref({
+  id:props.emp.id,
+  first_name:props.emp.first_name,
+  last_name:props.emp.last_name,
+  companies:props.emp.companies,
+  email:props.emp.email,
+  phone:props.emp.phone,
 })
-const emit = defineEmits(['update:modelValue','close'])
+
 const props = defineProps({
   modelValue:Boolean,
-  companies:{
+  emp:{
     required:true,
     type:Object
   }
+
 })
+
+const emit = defineEmits(['update:modelValue','close'])
 
 const show = computed({
   get: () => props.modelValue,
@@ -147,12 +152,13 @@ const show = computed({
 })
 
 onUpdated(()=>{
-  companies.value = {
-    id:props.companies.id,
-    name:props.companies.name,
-    email:props.companies.email,
-    image:props.companies.image,
-    website:props.companies.website,
+  emp.value = {
+    id:props.emp.id,
+    first_name:props.emp.first_name,
+    last_name:props.emp.last_name,
+    companies:props.emp.companies,
+    email:props.emp.email,
+    phone:props.emp.phone,
   }
 })
 
@@ -163,12 +169,12 @@ function closeModal() {
 
 function onSubmit() {
   loading.value = true
-  if (companies.value.id) {
-    store.dispatch('updateCompanies', companies.value)
+  if (emp.value.id) {
+    store.dispatch('updateEmployee', emp.value)
       .then(response => {
         loading.value = false;
         if (response.status === 200) {
-          store.dispatch('getCompanies')
+          store.dispatch('getEmployees')
           closeModal()
         }
       })
@@ -177,11 +183,12 @@ function onSubmit() {
         errorMsg.value = response.data.message;
       })
   } else {
-    store.dispatch('createCompanies', companies.value)
+    console.log(emp.value)
+    store.dispatch('createEmployee', emp.value)
       .then(response => {
         loading.value = false;
         if (response.status === 201) {
-          store.dispatch('getCompanies')
+          store.dispatch('getEmployees')
           closeModal()
         }
       })

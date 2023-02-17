@@ -22,10 +22,23 @@ export function setCompanies(state,[loading,response=null]){
       from:response.meta.from,
       to:response.meta.to,
       page:response.meta.current_page,
-
     }
   }
   state.companies.loading = loading;
-  // state.companies.data =response.data;
+}
 
+
+export function setEmployee(state,[loading,response=null]){
+  if (response){
+    state.employee = {
+      data:response.data,
+      links:response.meta.links,
+      total:response.meta.total,
+      limit:response.meta.per_page,
+      from:response.meta.from,
+      to:response.meta.to,
+      page:response.meta.current_page,
+    }
+  }
+  state.companies.loading = loading;
 }

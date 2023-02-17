@@ -1,85 +1,63 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\EmployeeValidation;
+use App\Http\Resources\EmpolyeeResoource;
+use App\Models\Companies;
 use App\Models\employee;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $search = request('search',false);
+        $perPage= request('per_page',10);
+        $query = Employee::query();
+        if ($search){
+            $query->where('first_name','like',"%{$search}%")
+                ->orWhere('last_name','like',"%{$search}%")
+                ->orWhere('email','like',"%{$search}%")
+                ->orWhere('phone','like',"%{$search}%")
+                ->orWhere('companies','like',"%{$search}%");
+        }
+        return EmpolyeeResoource::collection($query->paginate($perPage));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+
+    public function store(EmployeeValidation $request)
     {
-        //
+        $data = $request->validated();
+        if (isset($request->companies)){
+            $data['companies_id'] = (int)$request->companies;
+        }else{
+            $companies = Companies::first();
+            $data['companies_id'] =$companies->id;
+        }
+        $employee = Employee::create($data);
+        return new EmpolyeeResoource($employee);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function show($id)
     {
-        //
+        return new EmpolyeeResoource(Employee::FindOrfail($id));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function show(employee $employee)
+
+
+    public function update(EmployeeValidation $request, $id)
     {
-        //
+        $data = $request->validated();
+        Employee::where('id',$id)->update($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(employee $employee)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, employee $employee)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\employee  $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(employee $employee)
-    {
-        //
+        Employee::find($id)->delete();
+        return response()->noContent();
     }
 }

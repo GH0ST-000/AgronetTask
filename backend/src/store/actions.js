@@ -66,7 +66,6 @@ export function updateCompanies({commit},companies){
   }else {
     companies._method='PUT'
   }
-
   return axiosClient.post(`/companies/${id}`,companies)
 }
 
@@ -74,6 +73,40 @@ export function getCompany({},id){
   return axiosClient.get(`/companies/${id}`)
 }
 
+
 export function  deleteCompanies({commit},id){
   return axiosClient.delete(`/companies/${id}`);
+}
+
+
+
+export function getEmployees({commit},{url = null,search = '',perPage= 10} = {}){
+  commit('setEmployee',[true])
+  url = url || '/employee';
+  return  axiosClient.get(url,{
+    params:{search,per_page:perPage}
+  })
+    .then(res => {
+      commit('setEmployee',[false,res.data])
+    })
+    .catch(() => {
+      commit('setEmployee',[false])
+    })
+}
+export function createEmployee({commit},employee){
+    return axiosClient.post('/employee',employee)
+}
+
+export function updateEmployee({commit},employee){
+  const id = employee.id;
+  employee._method='PUT'
+  return axiosClient.post(`/employee/${id}`,employee)
+}
+
+export function getEmploy({},id){
+  return axiosClient.get(`/employee/${id}`)
+}
+
+export function  deleteEmployee({commit},id){
+  return axiosClient.delete(`/employee/${id}`);
 }
