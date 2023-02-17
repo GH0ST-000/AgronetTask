@@ -33,7 +33,7 @@
               <Spinner v-if="loading" class="absolute left-0 top-0 bg-white right-0 bg-white bottom-0 flex items-center justify-center" />
               <header class="py-3 px-4 flex justify-between items-center">
 
-                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-9--">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium bg-green-200 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md">
                   {{companies.id ? `Update Companies:"${props.companies.name}"` : 'Create New Companies'}}
                 </DialogTitle>
                 <button
