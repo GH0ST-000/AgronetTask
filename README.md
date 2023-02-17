@@ -20,4 +20,5 @@ Make sure you have environment setup properly. You will need MySQL, PHP8.1, Node
 13. Make sure `VITE_API_BASE_URL` key in `backend/.env` is set to your Laravel API host (Default: http://localhost:8000)
 14. Run `npm run dev`
 15. Copy vite server endpoint and open it browser
+16. Default it is http://localhost:3000 and add it path /login to redirect login
 
