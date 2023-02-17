@@ -98,6 +98,7 @@ export function createEmployee({commit},employee){
 }
 
 export function updateEmployee({commit},employee){
+
   const id = employee.id;
   employee._method='PUT'
   return axiosClient.post(`/employee/${id}`,employee)

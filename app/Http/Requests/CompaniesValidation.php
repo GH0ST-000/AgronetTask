@@ -18,9 +18,9 @@ class CompaniesValidation extends FormRequest
 
         return [
             'name'=>'required',
-            'email' => 'required|email',
-            'logo'=>'required|image|dimensions:width=100,height=100',
-            'website'=>'required|url'
+            'email' => 'nullable|email',
+            'logo'=>'nullable|image|dimensions:width=100,height=100',
+            'website'=>'nullable|url'
         ];
     }
 }

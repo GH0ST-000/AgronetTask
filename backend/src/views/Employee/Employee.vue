@@ -26,6 +26,7 @@ const DEFAULT_EMPTY_OBJECT={
   companies:'',
   email:'',
   phone:'',
+  company_names:[]
 }
 const showModal = ref(false);
 const employeeModel = ref({...DEFAULT_EMPTY_OBJECT})
@@ -37,6 +38,7 @@ function editEmployee(employee){
 store.dispatch('getEmploy',employee.id)
   .then(({data}) => {
     employeeModel.value = data.data;
+    employeeModel.value.companies =data.data.companies[0].name;
     showEmployeeModal();
   })
 }

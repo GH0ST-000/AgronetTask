@@ -1,4 +1,5 @@
 <template>
+
   <div class="bg-white p-4 rounded-lg shadow">
     <div class="flex justify-between border-b-2 pb-3">
       <div class="flex items-center">
@@ -130,9 +131,9 @@ const emit = defineEmits(['clickEdit'])
 
 const perPage = ref(EMPLOYEE_PER_PAGE);
 const search = ref('');
-let companies = [];
-const employee = computed(() => store.state.employee)
 
+const employee = computed(() => store.state.employee)
+const companies = ref([])
 onMounted(()=>{
   getEmployees();
 })
@@ -166,5 +167,7 @@ function deleteEmployee(employee){
 function editemployee(employee){
 emit('clickEdit',employee)
 }
+
+
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-
+{{tableMgs}}
   <TransitionRoot appear :show="show" as="template">
     <Dialog as="div" @close="closeModal" class="relative z-10">
       <TransitionChild
@@ -82,9 +82,9 @@
                 <div class="bg-white px-4 pt-5 pb-4">
                   <CustomInput class="mb-2" v-model="emp.first_name" label="Employee Name"/>
                   <CustomInput class="mb-2" v-model="emp.last_name" label="Employee lastname"/>
-                  <select class="mb-2 mt-1 w-full flex rounded-md shadow-sm inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                    <option>Select Companies</option>
-                    <option>1</option>
+                  <select v-model="emp.companies_id" v-if="emp.id" class="mb-2 mt-1 w-full flex rounded-md shadow-sm inline-flex
+                   items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                    <option v-for="n in emp.company_names" :value="n.name">{{n.name}}</option>
                   </select>
                   <CustomInput class="mb-2" v-model="emp.email" label="Employee email"/>
                   <CustomInput class="mb-2" v-model="emp.phone" label="Employee phone"/>
@@ -124,15 +124,17 @@ import CustomInput from "../../components/core/CustomInput.vue";
 import store from "../../store";
 const  loading = ref(false);
 let errorMsg = ref("");
-
+let tableMgs = ref("")
+let selected = '3'
 
 const emp = ref({
   id:props.emp.id,
   first_name:props.emp.first_name,
   last_name:props.emp.last_name,
-  companies:props.emp.companies,
+  companies_id:props.emp.companies,
   email:props.emp.email,
   phone:props.emp.phone,
+  company_names:props.emp.company_name
 })
 
 const props = defineProps({
@@ -156,9 +158,10 @@ onUpdated(()=>{
     id:props.emp.id,
     first_name:props.emp.first_name,
     last_name:props.emp.last_name,
-    companies:props.emp.companies,
+    companies_id:props.emp.companies,
     email:props.emp.email,
     phone:props.emp.phone,
+    company_names:props.emp.company_name
   }
 })
 
@@ -181,9 +184,9 @@ function onSubmit() {
       .catch(({response}) => {
         loading.value = false;
         errorMsg.value = response.data.message;
+
       })
   } else {
-    console.log(emp.value)
     store.dispatch('createEmployee', emp.value)
       .then(response => {
         loading.value = false;

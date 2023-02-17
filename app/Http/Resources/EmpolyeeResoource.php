@@ -16,7 +16,8 @@ class EmpolyeeResoource extends JsonResource
             'last_name'=>$this->last_name,
             'companies'=>Companies::where('id',$this->companies_id)->get('name'),
             'email'=>$this->email,
-            'phone'=>$this->phone
+            'phone'=>$this->phone,
+            'company_name'=>Companies::all()
         ];
     }
 }

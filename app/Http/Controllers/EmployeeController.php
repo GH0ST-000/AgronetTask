@@ -6,6 +6,7 @@ use App\Http\Resources\EmpolyeeResoource;
 use App\Models\Companies;
 use App\Models\employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -20,7 +21,7 @@ class EmployeeController extends Controller
                 ->orWhere('last_name','like',"%{$search}%")
                 ->orWhere('email','like',"%{$search}%")
                 ->orWhere('phone','like',"%{$search}%")
-                ->orWhere('companies','like',"%{$search}%");
+                ->orWhere('companies_id','like',"%{$search}%");
         }
         return EmpolyeeResoource::collection($query->paginate($perPage));
     }
@@ -29,15 +30,20 @@ class EmployeeController extends Controller
 
     public function store(EmployeeValidation $request)
     {
-        $data = $request->validated();
-        if (isset($request->companies)){
-            $data['companies_id'] = (int)$request->companies;
+        if (Companies::exists()){
+            $data = $request->validated();
+            if (isset($request->companies)){
+                $data['companies_id'] = (int)$request->companies;
+            }else{
+                $companies = Companies::first();
+                $data['companies_id'] =$companies->id;
+            }
+            $employee = Employee::create($data);
+            return new EmpolyeeResoource($employee);
         }else{
-            $companies = Companies::first();
-            $data['companies_id'] =$companies->id;
+            return response()->json(['message' => ['Companies not exist']]);
         }
-        $employee = Employee::create($data);
-        return new EmpolyeeResoource($employee);
+
     }
 
 
@@ -51,6 +57,8 @@ class EmployeeController extends Controller
     public function update(EmployeeValidation $request, $id)
     {
         $data = $request->validated();
+        $id_path=Companies::Where('name',$data['companies_id'])->first();
+        $data['companies_id'] = (int)$id_path->id;
         Employee::where('id',$id)->update($data);
     }
 

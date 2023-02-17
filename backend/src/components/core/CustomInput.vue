@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <label class="sr-only">{{ label }}</label>
     <div class="mt-1 flex rounded-md shadow-sm">
@@ -12,7 +13,7 @@
                 :value="props.modelValue"
                 :class="inputClasses"
                 @change="onChange($event.target.value)">
-          <option v-for="option of selectOptions" :value="option.key">{{option.text}}</option>
+          <option v-for="option of selectOptions" :value="option">{{option}}</option>
         </select>
       </template>
       <template v-else-if="type === 'textarea'">
