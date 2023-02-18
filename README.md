@@ -10,7 +10,7 @@ Make sure you have environment setup properly. You will need MySQL, PHP8.1, Node
 3. Navigate to the project's root directory using terminal
 4. Run `composer install`
 5. Set the encryption key by executing `php artisan key:generate --ansi`
-6. Run migrations `php artisan migrate `
+6. Run migrations and link `php artisan migrate ,php artisan storage:link`
 7. Run Seeder `php artisan db:seed --class=AdminUserSeeder `
 8. Start local server by executing `php artisan serve`
 9. Open new terminal and navigate to the `backend` folder
